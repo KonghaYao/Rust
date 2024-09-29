@@ -1,0 +1,16 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.shiki .line:hover {
+  background-color: #eee;
+}
+.shiki {
+  font-size: x-small;
+}
+.content-height {
+  height: calc(100vh - 3rem);
+}
+summary::marker {
+  display: none;
+}
