@@ -2,6 +2,7 @@
   "name": "example-with-tailwindcss",
   "type": "module",
   "scripts": {
+    "createIndex":"node ./scripts/genFilePath.mjs",
     "dev": "vinxi dev",
     "build": "vinxi build",
     "start": "vinxi start"
