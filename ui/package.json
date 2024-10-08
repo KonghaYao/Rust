@@ -4,7 +4,7 @@
   "scripts": {
     "createIndex": "node ./scripts/genFilePath.mjs",
     "dev": "vinxi dev",
-    "build": "vinxi build",
+    "build": "npm run createIndex && vinxi build",
     "start": "vinxi start"
   },
   "dependencies": {
