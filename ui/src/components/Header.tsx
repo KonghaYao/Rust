@@ -4,8 +4,8 @@ export default (props: { HeaderRightSlot?: JSXElement }) => {
   return (
     <header class="w-full h-12 border-b border-solid border-gray-200">
       <div class="flex flex-wrap items-center justify-between px-4 mx-auto h-full">
-        <a href="/" class="flex items-center">
-          <span class="self-center text-xl font-semibold whitespace-nowrap dark:text-white">
+        <a href="/en" class="flex items-center">
+          <span class="self-center text-xl font-semibold whitespace-nowrap">
             The Algorithms - Rust
           </span>
         </a>

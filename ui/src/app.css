@@ -5,12 +5,29 @@
 .shiki .line:hover {
   background-color: #eee;
 }
+.shiki .line {
+  display: block;
+}
 .shiki {
   font-size: x-small;
 }
+.shiki code {
+  @apply flex flex-col;
+}
+.shiki .marked {
+  @apply bg-orange-100;
+}
+.shiki .marked:hover {
+  @apply bg-orange-200;
+}
+
 .content-height {
   height: calc(100vh - 3rem);
 }
 summary::marker {
   display: none;
+}
+a.active,
+a.searching-active {
+  @apply bg-orange-100 rounded-md px-2;
 }

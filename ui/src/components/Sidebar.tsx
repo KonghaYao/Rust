@@ -1,6 +1,6 @@
-import { A } from "@solidjs/router";
+import { A, useHref, useParams } from "@solidjs/router";
 import routers from "../../public/index.json";
-import { createMemo, createSignal } from "solid-js";
+import { createMemo, createSignal, useContext } from "solid-js";
 
 export default () => {
   const routerTree = routers
@@ -25,6 +25,7 @@ export default () => {
       return acc;
     }, {} as RouterTreeType);
   const [hidden, setHidden] = createSignal(false);
+  const [searchText, setSearchText] = createSignal("");
   return (
     <nav
       class="flex flex-col h-full w-64 overflow-auto p-4 border-r border-gray-200"
@@ -32,13 +33,27 @@ export default () => {
         hidden: hidden(),
       }}
     >
-      <header>
-        <button onclick={() => setHidden((i) => !i)}>hide</button>
+      <header class="flex gap-4 mb-6">
+        {/* <button onclick={() => setHidden((i) => !i)}>hide</button> */}
+        <input
+          class="outline-none bg-gray-100 rounded-md px-2"
+          type="input"
+          value={searchText()}
+          oninput={(e) => setSearchText(e.target.value)}
+        ></input>
       </header>
-      <RouterTree name="Home" tree={routerTree} deep={0} open></RouterTree>
+      <RouterTree
+        name="Home"
+        tree={routerTree}
+        deep={0}
+        open
+        searchText={searchText()}
+      ></RouterTree>
     </nav>
   );
 };
+
+//  RouterTree
 
 interface RouterTreeType {
   [k: string]: RouterTreeType | string;
@@ -49,6 +64,7 @@ export const RouterTree = (props: {
   name: string;
   deep: number;
   open?: boolean;
+  searchText: string;
 }) => {
   const layer = createMemo(() => {
     return Object.entries(props.tree).map(([key, value]) => {
@@ -66,9 +82,10 @@ export const RouterTree = (props: {
       };
     });
   });
+  const params = useParams();
   return (
     <details
-      open={props.open}
+      open={props.open ?? !!props.searchText}
       style={{
         "padding-left": `${props.deep * 0.25}em`,
       }}
@@ -76,11 +93,21 @@ export const RouterTree = (props: {
       <summary class="cursor-pointer">{props.name}</summary>
       <div class="flex flex-col pl-4">
         {layer().map((i) => {
+          if (
+            props.searchText &&
+            i.isFile &&
+            !i.name.includes(props.searchText)
+          ) {
+            return null;
+          }
           if (typeof i.value === "string")
             return (
               <A
-                href={"./content" + i.value}
+                href={"/" + params.lang + "/content" + i.value}
                 class="overflow-hidden whitespace-nowrap text-ellipsis"
+                classList={{
+                  "searching-active": !!props.searchText,
+                }}
                 title={i.name}
               >
                 {i.name}
@@ -91,6 +118,7 @@ export const RouterTree = (props: {
               name={i.name}
               tree={i.value}
               deep={props.deep + 1}
+              searchText={props.searchText}
             ></RouterTree>
           );
         })}
